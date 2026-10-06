@@ -1,0 +1,784 @@
+-- OMGVIPSHOP current combined database export
+-- Source database: preview
+-- Includes current schema, data, theme settings, triggers, routines and events.
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS=0;
+CREATE DATABASE IF NOT EXISTS `preview` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `preview`;
+/*M!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.19  Distrib 10.11.14-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: preview
+-- ------------------------------------------------------
+-- Server version	10.11.14-MariaDB-0ubuntu0.24.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `admin_chat_messages`
+--
+
+DROP TABLE IF EXISTS `admin_chat_messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `admin_chat_messages` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `sender` enum('user','admin') NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `admin_read_at` timestamp NULL DEFAULT NULL,
+  `user_read_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_chat_user_created` (`user_id`,`created_at`),
+  KEY `idx_chat_sender` (`sender`),
+  KEY `idx_chat_user_id` (`user_id`,`id`),
+  KEY `idx_chat_admin_unread` (`sender`,`admin_read_at`),
+  KEY `idx_chat_user_unread` (`user_id`,`sender`,`user_read_at`),
+  KEY `idx_chat_user_admin_read` (`user_id`,`sender`,`admin_read_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin_chat_messages`
+--
+
+LOCK TABLES `admin_chat_messages` WRITE;
+/*!40000 ALTER TABLE `admin_chat_messages` DISABLE KEYS */;
+INSERT INTO `admin_chat_messages` VALUES
+(1,1,'user','.','2026-10-04 23:56:04',NULL,NULL);
+/*!40000 ALTER TABLE `admin_chat_messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bank`
+--
+
+DROP TABLE IF EXISTS `bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bank` (
+  `id` int(11) NOT NULL,
+  `fname` varchar(100) NOT NULL,
+  `lname` varchar(100) NOT NULL,
+  `bnum` varchar(50) NOT NULL,
+  `tname` varchar(100) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bank`
+--
+
+LOCK TABLES `bank` WRITE;
+/*!40000 ALTER TABLE `bank` DISABLE KEYS */;
+INSERT INTO `bank` VALUES
+(1,'ทนงศักดิ์','แซ่เติน','111-1-31808-1','ธนาคารกสิกร','2023-02-11 07:48:46','2024-02-11 16:43:57'),
+(1,'ชื่อ','สกุน','เลข','PromptPay','2026-10-04 23:45:38','2026-10-04 23:45:38');
+/*!40000 ALTER TABLE `bank` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `box_product`
+--
+
+DROP TABLE IF EXISTS `box_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `box_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `des` varchar(1000) NOT NULL,
+  `img` varchar(255) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT 0,
+  `percent` int(3) NOT NULL DEFAULT 100,
+  `salt_prize` varchar(255) NOT NULL DEFAULT 'ไม่ได้รับรางวัล',
+  `c_type` varchar(225) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `box_product`
+--
+
+LOCK TABLES `box_product` WRITE;
+/*!40000 ALTER TABLE `box_product` DISABLE KEYS */;
+INSERT INTO `box_product` VALUES
+(2,'เทส',0,'เทส','https://cdn.discordapp.com/attachments/1178032838189260901/1178227379093651466/83_20231126135426.png?ex=657560c1&is=6562ebc1&hm=ddeadee70b33168d4371dc9af50278f8b0c61f37eefc01fbcc45f1c0dbd55119&',1,100,'ไม่ได้รับรางวัล','0'),
+(3,'เทส1',0,'เทส1','https://cdn.discordapp.com/attachments/1178032838189260901/1178227379093651466/83_20231126135426.png?ex=657560c1&is=6562ebc1&hm=ddeadee70b33168d4371dc9af50278f8b0c61f37eefc01fbcc45f1c0dbd55119&',1,100,'ไม่ได้รับรางวัล','เทส2'),
+(4,'เทส2',0,'เทส2','https://cdn.discordapp.com/attachments/1178032838189260901/1178227379093651466/83_20231126135426.png?ex=657560c1&is=6562ebc1&hm=ddeadee70b33168d4371dc9af50278f8b0c61f37eefc01fbcc45f1c0dbd55119&',1,100,'ไม่ได้รับรางวัล','เทส1'),
+(5,'เทส3',0,'เทส3','https://cdn.discordapp.com/attachments/1178032838189260901/1178227379093651466/83_20231126135426.png?ex=657560c1&is=6562ebc1&hm=ddeadee70b33168d4371dc9af50278f8b0c61f37eefc01fbcc45f1c0dbd55119&',1,100,'ไม่ได้รับรางวัล','เทส2');
+/*!40000 ALTER TABLE `box_product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `box_stock`
+--
+
+DROP TABLE IF EXISTS `box_stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `box_stock` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` int(3) NOT NULL,
+  `p_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `box_stock`
+--
+
+LOCK TABLES `box_stock` WRITE;
+/*!40000 ALTER TABLE `box_stock` DISABLE KEYS */;
+/*!40000 ALTER TABLE `box_stock` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `boxlog`
+--
+
+DROP TABLE IF EXISTS `boxlog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `boxlog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime(2) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `prize_name` varchar(255) NOT NULL,
+  `uid` varchar(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `boxlog`
+--
+
+LOCK TABLES `boxlog` WRITE;
+/*!40000 ALTER TABLE `boxlog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `boxlog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `byshop`
+--
+
+DROP TABLE IF EXISTS `byshop`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `byshop` (
+  `status` varchar(255) NOT NULL,
+  `apikey` varchar(255) NOT NULL,
+  `cost` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `byshop`
+--
+
+LOCK TABLES `byshop` WRITE;
+/*!40000 ALTER TABLE `byshop` DISABLE KEYS */;
+INSERT INTO `byshop` VALUES
+('on','#','10');
+/*!40000 ALTER TABLE `byshop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `carousel`
+--
+
+DROP TABLE IF EXISTS `carousel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `carousel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `link` varchar(500) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `carousel`
+--
+
+LOCK TABLES `carousel` WRITE;
+/*!40000 ALTER TABLE `carousel` DISABLE KEYS */;
+INSERT INTO `carousel` VALUES
+(2,'\"https://i.ibb.co/5YQCW25/New-Project-12.png');
+/*!40000 ALTER TABLE `carousel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `c_id` int(11) NOT NULL AUTO_INCREMENT,
+  `c_name` varchar(255) NOT NULL,
+  `des` varchar(1000) NOT NULL,
+  `img` varchar(255) NOT NULL,
+  PRIMARY KEY (`c_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category`
+--
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES
+(1,'เทส1','เทส1','https://cdn.discordapp.com/attachments/1178032838189260901/1178225138370625637/82_20231126134526.png?ex=65755eab&is=6562e9ab&hm=78b6da730beba327f9b41b9ed51c4c0470b7dae78b05d04ffce8caed09475e39&'),
+(2,'เทส2','เทส2','https://cdn.discordapp.com/attachments/1178032838189260901/1178225138370625637/82_20231126134526.png?ex=65755eab&is=6562e9ab&hm=78b6da730beba327f9b41b9ed51c4c0470b7dae78b05d04ffce8caed09475e39&');
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crecom`
+--
+
+DROP TABLE IF EXISTS `crecom`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `crecom` (
+  `recom_1` int(11) NOT NULL DEFAULT 0,
+  `recom_2` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crecom`
+--
+
+LOCK TABLES `crecom` WRITE;
+/*!40000 ALTER TABLE `crecom` DISABLE KEYS */;
+INSERT INTO `crecom` VALUES
+(0,0);
+/*!40000 ALTER TABLE `crecom` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `discount_codes`
+--
+
+DROP TABLE IF EXISTS `discount_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `discount_codes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `discount_type` enum('percent','fixed') NOT NULL DEFAULT 'percent',
+  `discount_value` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `min_purchase` decimal(10,2) DEFAULT 0.00,
+  `max_discount` decimal(10,2) DEFAULT NULL,
+  `usage_limit` int(11) DEFAULT NULL,
+  `used_count` int(11) NOT NULL DEFAULT 0,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_discount_code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `discount_codes`
+--
+
+LOCK TABLES `discount_codes` WRITE;
+/*!40000 ALTER TABLE `discount_codes` DISABLE KEYS */;
+INSERT INTO `discount_codes` VALUES
+(1,'WELCOME10','percent',10.00,0.00,NULL,100,0,NULL,NULL,1,'2026-10-04 23:45:38');
+/*!40000 ALTER TABLE `discount_codes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `discount_usage`
+--
+
+DROP TABLE IF EXISTS `discount_usage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `discount_usage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `discount_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `used_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_discount_user` (`code_id`,`user_id`),
+  KEY `idx_discount_usage_user` (`user_id`),
+  CONSTRAINT `fk_discount_usage_code` FOREIGN KEY (`code_id`) REFERENCES `discount_codes` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_discount_usage_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `discount_usage`
+--
+
+LOCK TABLES `discount_usage` WRITE;
+/*!40000 ALTER TABLE `discount_usage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `discount_usage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `home_nav_items`
+--
+
+DROP TABLE IF EXISTS `home_nav_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `home_nav_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(120) NOT NULL,
+  `icon` varchar(80) NOT NULL DEFAULT 'fa-circle',
+  `image_url` varchar(500) NOT NULL DEFAULT '',
+  `link` varchar(500) NOT NULL DEFAULT '?page=home',
+  `bg_color` varchar(20) NOT NULL DEFAULT '#102313',
+  `icon_color` varchar(20) NOT NULL DEFAULT '#b8d82e',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `home_nav_items`
+--
+
+LOCK TABLES `home_nav_items` WRITE;
+/*!40000 ALTER TABLE `home_nav_items` DISABLE KEYS */;
+INSERT INTO `home_nav_items` VALUES
+(1,'เลือกซื้อสินค้า','fa-shop','','?page=shop','#211a05','#ffb300',1,1,'2026-10-05 00:00:54'),
+(2,'เติมเงิน','fa-wallet','','?page=topup','#06231a','#66d63c',1,2,'2026-10-06 05:53:15'),
+(3,'แลกโค้ด','fa-gift','','?page=redeem','#210b12','#ff4d6d',1,3,'2026-10-06 05:53:15'),
+(4,'Download (THLIVE-MOD-FREE)','fa-download','','view/apkmodfree.php','#211a05','#ffb300',1,4,'2026-10-06 05:53:23'),
+(5,'แจ้งโอนเงิน','fa-receipt','','?page=slip','#071b24','#7cff4d',1,5,'2026-10-06 05:53:15');
+/*!40000 ALTER TABLE `home_nav_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `kbank_trans`
+--
+
+DROP TABLE IF EXISTS `kbank_trans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `kbank_trans` (
+  `id` int(11) NOT NULL,
+  `qr` varchar(255) NOT NULL,
+  `ref` varchar(255) NOT NULL,
+  `sender` varchar(100) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `kbank_trans`
+--
+
+LOCK TABLES `kbank_trans` WRITE;
+/*!40000 ALTER TABLE `kbank_trans` DISABLE KEYS */;
+INSERT INTO `kbank_trans` VALUES
+(7,'004100060000010103004022001405190636BTF060015102TH9104DD4A','01402590636BTF06001',NULL,'2024-01-25 19:09:39','2024-01-25 12:26:30');
+/*!40000 ALTER TABLE `kbank_trans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `popup_announcements`
+--
+
+DROP TABLE IF EXISTS `popup_announcements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `popup_announcements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text DEFAULT NULL,
+  `image_url` varchar(500) DEFAULT NULL,
+  `button_text` varchar(100) DEFAULT 'ถัดไป',
+  `button_link` varchar(500) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `show_order` int(11) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `popup_announcements`
+--
+
+LOCK TABLES `popup_announcements` WRITE;
+/*!40000 ALTER TABLE `popup_announcements` DISABLE KEYS */;
+/*!40000 ALTER TABLE `popup_announcements` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recom`
+--
+
+DROP TABLE IF EXISTS `recom`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recom` (
+  `recom_1` int(11) NOT NULL DEFAULT 0,
+  `recom_2` int(11) NOT NULL DEFAULT 0,
+  `recom_3` int(11) NOT NULL DEFAULT 0,
+  `recom_4` int(11) NOT NULL DEFAULT 0,
+  `recom_5` int(11) NOT NULL DEFAULT 0,
+  `recom_6` int(11) NOT NULL DEFAULT 0,
+  `recom_7` int(11) NOT NULL DEFAULT 0,
+  `recom_8` int(11) NOT NULL DEFAULT 0,
+  `recom_9` int(11) NOT NULL DEFAULT 0,
+  `recom_10` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recom`
+--
+
+LOCK TABLES `recom` WRITE;
+/*!40000 ALTER TABLE `recom` DISABLE KEYS */;
+INSERT INTO `recom` VALUES
+(0,0,0,0,0,0,0,0,0,0);
+/*!40000 ALTER TABLE `recom` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `redeem`
+--
+
+DROP TABLE IF EXISTS `redeem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `redeem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) NOT NULL,
+  `count` int(11) NOT NULL DEFAULT 0,
+  `max_count` int(11) NOT NULL,
+  `prize` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `redeem`
+--
+
+LOCK TABLES `redeem` WRITE;
+/*!40000 ALTER TABLE `redeem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `redeem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `redeem_his`
+--
+
+DROP TABLE IF EXISTS `redeem_his`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `redeem_his` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` varchar(11) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `date` datetime(2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `redeem_his`
+--
+
+LOCK TABLES `redeem_his` WRITE;
+/*!40000 ALTER TABLE `redeem_his` DISABLE KEYS */;
+/*!40000 ALTER TABLE `redeem_his` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `setting`
+--
+
+DROP TABLE IF EXISTS `setting`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `setting` (
+  `wallet` varchar(255) NOT NULL,
+  `fee` enum('on','off') NOT NULL DEFAULT 'off',
+  `bg` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `ann` varchar(255) NOT NULL,
+  `main_color` varchar(255) NOT NULL,
+  `sec_color` varchar(255) NOT NULL,
+  `contact` varchar(255) NOT NULL,
+  `des` varchar(255) NOT NULL,
+  `date` datetime(2) NOT NULL,
+  `ip` varchar(100) NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  `background_url` text DEFAULT NULL,
+  `landing_background_url` text DEFAULT NULL,
+  `webhook_dc` varchar(255) NOT NULL,
+  `discord_server` varchar(255) NOT NULL DEFAULT '',
+  `theme_mode` enum('light','dark') NOT NULL DEFAULT 'light',
+  `topup_gift_status` enum('on','off') NOT NULL DEFAULT 'on',
+  `topup_redeem_status` enum('on','off') NOT NULL DEFAULT 'on',
+  `topup_slip_status` enum('on','off') NOT NULL DEFAULT 'on',
+  `topup_promptpay_status` enum('on','off') NOT NULL DEFAULT 'on',
+  `contact_facebook` varchar(255) DEFAULT '#',
+  `contact_line` varchar(255) DEFAULT '#',
+  `contact_discord` varchar(255) DEFAULT '#',
+  `contact_messenger` varchar(255) DEFAULT '#',
+  `contact_telegram1` varchar(255) DEFAULT '#',
+  `contact_telegram2` varchar(255) DEFAULT '#',
+  `discord_widget_status` enum('on','off') NOT NULL DEFAULT 'off',
+  `how_to_text` text DEFAULT NULL,
+  `rules_text` text DEFAULT NULL,
+  `announcement_status` enum('on','off') NOT NULL DEFAULT 'on',
+  `stats_status` enum('on','off') NOT NULL DEFAULT 'on',
+  `slip_api_type` varchar(50) DEFAULT 'easyslip' COMMENT 'easyslip, slipok, rdcw',
+  `slip_api_key` varchar(255) DEFAULT '' COMMENT 'API Key for slip verification',
+  `slip_api_branch` varchar(100) DEFAULT '' COMMENT 'Branch ID for SlipOk',
+  `border_color` varchar(7) NOT NULL DEFAULT '#8543be',
+  `text_color` varchar(7) NOT NULL DEFAULT '#f5efff',
+  `bg_color` varchar(7) NOT NULL DEFAULT '#080510',
+  `card_color` varchar(7) NOT NULL DEFAULT '#140a22',
+  `button_color` varchar(7) NOT NULL DEFAULT '#8d3cff',
+  `success_color` varchar(7) NOT NULL DEFAULT '#a855f7',
+  `warning_color` varchar(7) NOT NULL DEFAULT '#a855f7',
+  `danger_color` varchar(7) NOT NULL DEFAULT '#ef476f',
+  `info_color` varchar(7) NOT NULL DEFAULT '#a855f7',
+  `font_family` varchar(40) NOT NULL DEFAULT 'kanit',
+  `font_size` int(11) NOT NULL DEFAULT 16,
+  `discord_topup_notify` enum('on','off') NOT NULL DEFAULT 'off',
+  `discord_purchase_notify` enum('on','off') NOT NULL DEFAULT 'off',
+  `topup_card_status` enum('on','off') NOT NULL DEFAULT 'off',
+  `rain_enabled` varchar(3) NOT NULL DEFAULT 'off',
+  `rain_density` int(11) NOT NULL DEFAULT 70,
+  `glow_enabled` varchar(3) NOT NULL DEFAULT 'on',
+  `glow_speed` int(11) NOT NULL DEFAULT 5,
+  `rain_white_color` varchar(7) NOT NULL DEFAULT '#f5efff',
+  `rain_gray_color` varchar(7) NOT NULL DEFAULT '#a855f7',
+  `glow_dark_color` varchar(7) NOT NULL DEFAULT '#7e2bbe',
+  `glow_light_color` varchar(7) NOT NULL DEFAULT '#a855f7',
+  `chat_status` enum('on','off') NOT NULL DEFAULT 'off'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `setting`
+--
+
+LOCK TABLES `setting` WRITE;
+/*!40000 ALTER TABLE `setting` DISABLE KEYS */;
+INSERT INTO `setting` VALUES
+('','off','ไม่สามารถเปลี่ยนได้','OMGVIPSHOP','ยินดีต้อนรับสู่ OMGVIPSHOP','#8d3cff','#a855f7','#','บริการ OMGVIPSHOP ดาวน์โหลดแอปและสินค้าออนไลน์','2022-12-25 12:30:39.00','::1','assets/omg-logo.png',NULL,NULL,'','','dark','off','off','off','off','#','#','#','#','#','#','off','','','on','on','easyslip','','','#8543be','#f5efff','#080510','#140a22','#8d3cff','#a855f7','#a855f7','#ef476f','#a855f7','kanit',16,'off','off','off','off',70,'on',5,'#f5efff','#a855f7','#7e2bbe','#a855f7','off');
+/*!40000 ALTER TABLE `setting` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `slip_requests`
+--
+
+DROP TABLE IF EXISTS `slip_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `slip_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `ref` varchar(255) NOT NULL,
+  `image_hash` char(64) NOT NULL,
+  `image_path` varchar(500) NOT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `admin_note` varchar(500) NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL,
+  `reviewed_at` datetime DEFAULT NULL,
+  `reviewed_by` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `ref` (`ref`),
+  KEY `image_hash` (`image_hash`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `slip_requests`
+--
+
+LOCK TABLES `slip_requests` WRITE;
+/*!40000 ALTER TABLE `slip_requests` DISABLE KEYS */;
+/*!40000 ALTER TABLE `slip_requests` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `static`
+--
+
+DROP TABLE IF EXISTS `static`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `static` (
+  `s_count` int(11) NOT NULL DEFAULT 2575,
+  `b_count` int(11) NOT NULL DEFAULT 3525,
+  `m_count` int(11) NOT NULL DEFAULT 5468,
+  `last_change` datetime(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `static`
+--
+
+LOCK TABLES `static` WRITE;
+/*!40000 ALTER TABLE `static` DISABLE KEYS */;
+INSERT INTO `static` VALUES
+(0,0,0,'2023-01-04 19:06:16.00');
+/*!40000 ALTER TABLE `static` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `topup_his`
+--
+
+DROP TABLE IF EXISTS `topup_his`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `topup_his` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `link` varchar(255) NOT NULL,
+  `amount` int(20) NOT NULL,
+  `date` datetime NOT NULL,
+  `uid` int(11) NOT NULL,
+  `uname` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `topup_his`
+--
+
+LOCK TABLES `topup_his` WRITE;
+/*!40000 ALTER TABLE `topup_his` DISABLE KEYS */;
+INSERT INTO `topup_his` VALUES
+(1,'บัตรทรูมันนี่ ****9999 (เต็ม 999.00 หัก 25%)',749,'2026-10-05 06:55:16',1,'admin');
+/*!40000 ALTER TABLE `topup_his` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `truemoney_card_requests`
+--
+
+DROP TABLE IF EXISTS `truemoney_card_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `truemoney_card_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `card_hash` char(64) NOT NULL,
+  `card_last4` char(4) NOT NULL,
+  `card_encrypted` text NOT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `admin_note` varchar(500) NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL,
+  `reviewed_at` datetime DEFAULT NULL,
+  `reviewed_by` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `card_hash` (`card_hash`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `truemoney_card_requests`
+--
+
+LOCK TABLES `truemoney_card_requests` WRITE;
+/*!40000 ALTER TABLE `truemoney_card_requests` DISABLE KEYS */;
+INSERT INTO `truemoney_card_requests` VALUES
+(1,1,'admin','18802513937f0d44eb3044a7476fad3c0a994fa590fd01ba091a5f5b1ffe8fa1','9999','7ZPlGT2DOeNKdSJoTFaHN6bozlpdnfI7zwX9w87XjvO3U6x4mWLUmSD4',749.25,'approved','ยอดเต็ม 999.00 บาท หัก 25% รับสุทธิ 749.25 บาท','2026-10-05 06:55:05','2026-10-05 06:55:16','admin');
+/*!40000 ALTER TABLE `truemoney_card_requests` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `point` float NOT NULL,
+  `total` float NOT NULL,
+  `rank` int(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES
+(1,'admin','$2y$10$ne5UW.0VLvwMczJmwTLNf.bB9e6aTiOWcuCu5XPKU2mri3RTF6WnC','2024-05-02',749.25,749.25,1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping events for database 'preview'
+--
+
+--
+-- Dumping routines for database 'preview'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-10-06 10:34:41
